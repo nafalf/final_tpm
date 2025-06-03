@@ -195,7 +195,7 @@ class _DetailPageState extends State<DetailPage> {
               : SingleChildScrollView(
                   child: Column(
                     children: [
-                      // Hero Image Section with Plant Icon
+                      // Hero Image Section
                       Container(
                         width: double.infinity,
                         height: 300,
@@ -206,36 +206,67 @@ class _DetailPageState extends State<DetailPage> {
                             colors: [Colors.green[600]!, Colors.green[400]!],
                           ),
                         ),
-                        child: Stack(
-                          children: [
-                            // Background pattern
-                            Positioned.fill(
-                              child: Opacity(
-                                opacity: 0.1,
-                                child: Image.asset(
-                                  'assets/plant_pattern.png', // You can add a subtle plant pattern
-                                  repeat: ImageRepeat.repeat,
+                        child: plantDetail!['image_url'] != null
+                            ? ClipRRect(
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    Image.network(
+                                      plantDetail!['image_url'],
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Container(
+                                          color: Colors.green[100],
+                                          child: Icon(
+                                            Icons.local_florist,
+                                            size: 80,
+                                            color: Colors.green[300],
+                                          ),
+                                        );
+                                      },
+                                      loadingBuilder: (context, child, loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Container(
+                                          color: Colors.green[100],
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: Colors.green[600],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    // Gradient overlay for better text readability
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.black.withOpacity(0.3),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Center(
+                                child: Container(
+                                  width: 120,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.local_florist,
+                                    size: 60,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            // Plant Icon (replacing flower pot image)
-                            Center(
-                              child: Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.local_florist,
-                                  size: 60,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                       
                       // Content Section
@@ -290,26 +321,6 @@ class _DetailPageState extends State<DetailPage> {
                                   ),
                                 ),
                               ],
-                            ),
-                            
-                            const SizedBox(height: 20),
-                            
-                            // Description section
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.green[50],
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.green[200]!),
-                              ),
-                              child: Text(
-                                'Tanaman cantik yang tumbuh alami di berbagai wilayah. Memiliki keunikan tersendiri dan mudah untuk dirawat. Cocok untuk menghiasi rumah atau taman Anda.',
-                                style: TextStyle(
-                                  color: Colors.grey[700],
-                                  height: 1.5,
-                                  fontSize: 14,
-                                ),
-                              ),
                             ),
                             
                             const SizedBox(height: 24),
